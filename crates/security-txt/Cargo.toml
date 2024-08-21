@@ -1,0 +1,12 @@
+[package]
+name = "security-txt"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[features]
+parse = ["thiserror", "memchr"]
+
+[dependencies]
+thiserror = { workspace = true, optional = true }
+memchr = { workspace = true, optional = true }

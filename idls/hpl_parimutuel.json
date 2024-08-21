@@ -1,0 +1,1150 @@
+{
+  "version": "3.1.0",
+  "name": "hpl_parimutuel",
+  "instructions": [
+    {
+      "name": "CreateConfigV1",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Program config"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "createConfigV1Args",
+          "type": {
+            "defined": "CreateConfigV1Args"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 0
+      }
+    },
+    {
+      "name": "CreateUserV1",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      }
+    },
+    {
+      "name": "CreateMarketV1",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Program config"
+          ]
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Deposit token mint"
+          ]
+        },
+        {
+          "name": "deposit",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Deposit token account"
+          ]
+        },
+        {
+          "name": "creatorFees",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Creator fees account"
+          ]
+        },
+        {
+          "name": "platformFees",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Platform fees account"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "createMarketV1Args",
+          "type": {
+            "defined": "CreateMarketV1Args"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 2
+      }
+    },
+    {
+      "name": "CreateUserPositionV1",
+      "accounts": [
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "userPosition",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User position"
+          ]
+        },
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "User"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 3
+      }
+    },
+    {
+      "name": "DepositV1",
+      "accounts": [
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "userPosition",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User position"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Deposit token mint"
+          ]
+        },
+        {
+          "name": "deposit",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Deposit token account"
+          ]
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User token account"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "depositV1Args",
+          "type": {
+            "defined": "DepositV1Args"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 4
+      }
+    },
+    {
+      "name": "ResolveV1",
+      "accounts": [
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "resolver",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Resolver"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Deposit token mint"
+          ]
+        },
+        {
+          "name": "deposit",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Deposit token account"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "resolveV1Args",
+          "type": {
+            "defined": "ResolveV1Args"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 5
+      }
+    },
+    {
+      "name": "WithdrawV1",
+      "accounts": [
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "userPosition",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User position"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Deposit token mint"
+          ]
+        },
+        {
+          "name": "deposit",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Deposit token account"
+          ]
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User token account"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 6
+      }
+    },
+    {
+      "name": "ClaimV1",
+      "accounts": [
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "userPosition",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User position"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Deposit token mint"
+          ]
+        },
+        {
+          "name": "deposit",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Deposit token account"
+          ]
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User token account"
+          ]
+        },
+        {
+          "name": "creatorFees",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Creator fees account"
+          ]
+        },
+        {
+          "name": "platformFees",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Platform fees account"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 7
+      }
+    },
+    {
+      "name": "WithdrawCreatorFeesV1",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "User"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Token mint"
+          ]
+        },
+        {
+          "name": "creatorFees",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Creator fees account"
+          ]
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User token account"
+          ]
+        },
+        {
+          "name": "wallet",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User wallet"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 8
+      }
+    },
+    {
+      "name": "WithdrawPlatformFeesV1",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Config"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Token mint"
+          ]
+        },
+        {
+          "name": "platformFees",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Platform fees account"
+          ]
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Withdrawal token account"
+          ]
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "Config authority"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 9
+      }
+    },
+    {
+      "name": "InvalidateInactiveV1",
+      "accounts": [
+        {
+          "name": "config",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Config"
+          ]
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Market"
+          ]
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Deposit token mint"
+          ]
+        },
+        {
+          "name": "deposit",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Deposit token account"
+          ]
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true,
+          "docs": [
+            "Payer"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL token program"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "System program"
+          ]
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 10
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ConfigV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": {
+              "defined": "AccountType"
+            }
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "platformFee",
+            "type": {
+              "defined": "Bps"
+            }
+          },
+          {
+            "name": "inactiveDuration",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": {
+              "defined": "AccountType"
+            }
+          },
+          {
+            "name": "creator",
+            "type": "publicKey"
+          },
+          {
+            "name": "index",
+            "type": "u32"
+          },
+          {
+            "name": "resolver",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "closeTimestamp",
+            "type": "i64"
+          },
+          {
+            "name": "resolveTimestamp",
+            "type": "i64"
+          },
+          {
+            "name": "outcomeTimestamp",
+            "type": "i64"
+          },
+          {
+            "name": "creatorFee",
+            "type": {
+              "defined": "Bps"
+            }
+          },
+          {
+            "name": "platformFee",
+            "type": {
+              "defined": "Bps"
+            }
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "State"
+            }
+          },
+          {
+            "name": "outcome",
+            "type": "u8"
+          },
+          {
+            "name": "amounts",
+            "type": {
+              "defined": "SmallU64Array"
+            }
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": {
+              "defined": "AccountType"
+            }
+          },
+          {
+            "name": "wallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "nextMarket",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserPositionV1",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": {
+              "defined": "AccountType"
+            }
+          },
+          {
+            "name": "market",
+            "type": "publicKey"
+          },
+          {
+            "name": "wallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
+          },
+          {
+            "name": "amounts",
+            "type": {
+              "defined": "SmallU64Array"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "CreateConfigV1Args",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "platformFee",
+            "type": "u16"
+          },
+          {
+            "name": "inactiveDuration",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateMarketV1Args",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "resolver",
+            "type": "publicKey"
+          },
+          {
+            "name": "closeTimestamp",
+            "type": "i64"
+          },
+          {
+            "name": "resolveTimestamp",
+            "type": "i64"
+          },
+          {
+            "name": "creatorFee",
+            "type": "u16"
+          },
+          {
+            "name": "options",
+            "type": "u8"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DepositV1Args",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "option",
+            "type": "u8"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Bps",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bps",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ResolveV1Args",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Outcome",
+            "fields": [
+              {
+                "name": "outcome",
+                "type": "u8"
+              }
+            ]
+          },
+          {
+            "name": "Invalid"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Uninitialized"
+          },
+          {
+            "name": "ConfigV1"
+          },
+          {
+            "name": "UserV1"
+          },
+          {
+            "name": "MarketV1"
+          },
+          {
+            "name": "UserPositionV1"
+          },
+          {
+            "name": "LuloPoolV1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "State",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Open"
+          },
+          {
+            "name": "Resolved"
+          },
+          {
+            "name": "Invalid"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 0,
+      "name": "InvalidBps",
+      "msg": "Invalid basis points value"
+    },
+    {
+      "code": 1,
+      "name": "CloseTimestampInPast",
+      "msg": "Close timestamp is in the past"
+    },
+    {
+      "code": 2,
+      "name": "ResolveTimestampBeforeClose",
+      "msg": "Resolve timestamp is before the close timestamp"
+    },
+    {
+      "code": 3,
+      "name": "MarketClosed",
+      "msg": "Market is closed"
+    },
+    {
+      "code": 4,
+      "name": "MarketInvalid",
+      "msg": "Market is invalid"
+    },
+    {
+      "code": 5,
+      "name": "MarketNotResolved",
+      "msg": "Market is not resolved"
+    },
+    {
+      "code": 6,
+      "name": "MarketNotInvalid",
+      "msg": "Market is not invalid"
+    },
+    {
+      "code": 7,
+      "name": "AlreadyResolved",
+      "msg": "Market already resolved"
+    },
+    {
+      "code": 8,
+      "name": "AlreadyClaimed",
+      "msg": "Already claimed"
+    },
+    {
+      "code": 9,
+      "name": "ResolveTooEarly",
+      "msg": "Market resolution timestamp has not been reached"
+    },
+    {
+      "code": 10,
+      "name": "InvalidOption",
+      "msg": "Invalid option for market"
+    },
+    {
+      "code": 11,
+      "name": "MarketMintMismatch",
+      "msg": "Mint address does not match market mint"
+    },
+    {
+      "code": 12,
+      "name": "MarketResolverMismatch",
+      "msg": "Resolver address does not match market resolver"
+    },
+    {
+      "code": 13,
+      "name": "UserWalletMismatch",
+      "msg": "Wallet address does not match user wallet"
+    },
+    {
+      "code": 14,
+      "name": "ConfigAuthorityMismatch",
+      "msg": "Authority address does not match config authority"
+    },
+    {
+      "code": 15,
+      "name": "InactiveTooEarly",
+      "msg": "Market inactive timestamp has not been reached"
+    },
+    {
+      "code": 16,
+      "name": "DeserializationError",
+      "msg": "Failed to deserialize account"
+    },
+    {
+      "code": 17,
+      "name": "SerializationError",
+      "msg": "Failed to serialize account"
+    },
+    {
+      "code": 18,
+      "name": "FeeOverflow",
+      "msg": "Combined platform and creator fees exceed 100%"
+    }
+  ],
+  "metadata": {
+    "origin": "shank",
+    "address": "PARrVs6F5egaNuz8g6pKJyU4ze3eX5xGZCFb3GLiVvu",
+    "binaryVersion": "0.4.2",
+    "libVersion": "0.4.2"
+  }
+}
