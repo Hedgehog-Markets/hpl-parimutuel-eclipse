@@ -58,8 +58,7 @@ impl Display for SecurityTxt {
             }
         }
 
-        writeln!(f, "\nPolicy:")?;
-        writeln!(f, "{}", self.policy)?;
+        writeln!(f, "\nPolicy: {}", self.policy)?;
 
         if !self.preferred_languages.is_empty() {
             writeln!(f, "\nPreferred Languages:")?;
@@ -71,11 +70,9 @@ impl Display for SecurityTxt {
         if let Some(source_code) = &self.source_code {
             writeln!(f, "Source code: {}", source_code)?;
         }
-
         if let Some(source_release) = &self.source_release {
             writeln!(f, "Source release: {}", source_release)?;
         }
-
         if let Some(source_revision) = &self.source_revision {
             writeln!(f, "Source revision: {}", source_revision)?;
         }
@@ -100,31 +97,31 @@ impl Display for SecurityTxt {
         if let Some(expiry) = &self.expiry {
             writeln!(f, "Expires at: {}", expiry)?;
         }
+
         Ok(())
     }
 }
 
 impl FromStr for Contact {
-    type Err = SecurityTxtError;
+    type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (typ, value) =
-            s.split_once(":").ok_or_else(|| SecurityTxtError::InvalidContact(s.to_string()))?;
+        let (typ, value) = s.split_once(":").ok_or_else(|| Error::InvalidContact(s.to_owned()))?;
         let (contact_type, contact_info) = (typ.trim(), value.trim());
         match contact_type.to_ascii_lowercase().as_str() {
-            "email" => Ok(Contact::Email(contact_info.to_string())),
-            "discord" => Ok(Contact::Discord(contact_info.to_string())),
-            "telegram" => Ok(Contact::Telegram(contact_info.to_string())),
-            "twitter" => Ok(Contact::Twitter(contact_info.to_string())),
-            "link" => Ok(Contact::Link(contact_info.to_string())),
-            "other" => Ok(Contact::Other(contact_info.to_string())),
-            _ => Err(SecurityTxtError::InvalidContact(s.to_string())),
+            "email" => Ok(Contact::Email(contact_info.to_owned())),
+            "discord" => Ok(Contact::Discord(contact_info.to_owned())),
+            "telegram" => Ok(Contact::Telegram(contact_info.to_owned())),
+            "twitter" => Ok(Contact::Twitter(contact_info.to_owned())),
+            "link" => Ok(Contact::Link(contact_info.to_owned())),
+            "other" => Ok(Contact::Other(contact_info.to_owned())),
+            _ => Err(Error::InvalidContact(s.to_owned())),
         }
     }
 }
 
 #[derive(Debug, Error)]
-pub enum SecurityTxtError {
+pub enum Error {
     #[error("security.txt doesn't start with the right string")]
     InvalidSecurityTxtBegin,
     #[error("couldn't find end string")]
@@ -148,92 +145,98 @@ pub enum SecurityTxtError {
 }
 
 /// Parses a security.txt from the start of `data`.
-pub fn parse(data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
+pub fn parse(data: &[u8]) -> Result<SecurityTxt, Error> {
     let Some(data) = data.strip_prefix(SECURITY_TXT_BEGIN.as_bytes()) else {
-        return Err(SecurityTxtError::InvalidSecurityTxtBegin);
+        return Err(Error::InvalidSecurityTxtBegin);
     };
 
     let data = match memchr::memmem::find(data, SECURITY_TXT_END.as_bytes()) {
         Some(end) => &data[..end],
-        None => return Err(SecurityTxtError::EndNotFound),
+        None => return Err(Error::EndNotFound),
     };
 
     let mut attributes = HashMap::<String, String>::new();
-    let mut field: Option<String> = None;
-    for part in data.split(|&b| b == 0) {
-        if let Some(ref f) = field {
-            let value = std::str::from_utf8(part)
-                .map_err(|_| SecurityTxtError::InvalidValue(part.to_vec(), f.clone()))?;
-            attributes.insert(f.clone(), value.to_string());
-            field = None;
-        } else {
-            field = Some({
-                let field = std::str::from_utf8(part)
-                    .map_err(|_| SecurityTxtError::InvalidField(part.to_vec()))?
-                    .to_string();
-                if attributes.contains_key(&field) {
-                    return Err(SecurityTxtError::DuplicateField(field));
+    {
+        let mut field: Option<String> = None;
+
+        for part in data.split(|&b| b == 0) {
+            field = match field {
+                Some(f) => {
+                    let value = std::str::from_utf8(part)
+                        .map_err(|_| Error::InvalidValue(part.to_vec(), f.clone()))?;
+
+                    attributes.insert(f.clone(), value.to_owned());
+
+                    None
                 }
-                field
-            });
+                None => {
+                    let field = std::str::from_utf8(part)
+                        .map_err(|_| Error::InvalidField(part.to_vec()))?
+                        .to_owned();
+
+                    if attributes.contains_key(&field) {
+                        return Err(Error::DuplicateField(field));
+                    }
+
+                    Some(field)
+                }
+            };
         }
     }
 
-    let name = attributes.remove("name").ok_or(SecurityTxtError::MissingField("name"))?;
-    let project_url =
-        attributes.remove("project_url").ok_or(SecurityTxtError::MissingField("project_url"))?;
+    let name = attributes.remove("name").ok_or(Error::MissingField("name"))?;
+    let project_url = attributes.remove("project_url").ok_or(Error::MissingField("project_url"))?;
+
+    let contacts = attributes
+        .remove("contacts")
+        .ok_or(Error::MissingField("contacts"))?
+        .split(",")
+        .map(|s| s.trim().parse())
+        .collect::<Result<Vec<_>, _>>()?;
+
+    let preferred_languages = attributes
+        .remove("preferred_languages")
+        .map(|v| v.split(",").map(|s| s.trim().to_owned()).collect())
+        .unwrap_or_default();
+
+    let policy = attributes.remove("policy").ok_or(Error::MissingField("policy"))?;
+
     let source_code = attributes.remove("source_code");
     let source_release = attributes.remove("source_release");
     let source_revision = attributes.remove("source_revision");
-    let expiry = attributes.remove("expiry");
-    let preferred_languages = attributes
-        .remove("preferred_languages")
-        .unwrap_or_default()
-        .split(",")
-        .map(|s| s.trim().to_string())
-        .collect();
-    let contacts: Result<Vec<_>, SecurityTxtError> = attributes
-        .remove("contacts")
-        .ok_or(SecurityTxtError::MissingField("contacts"))?
-        .split(",")
-        .map(|s| Contact::from_str(s.trim()))
-        .collect();
-    let contacts = contacts?;
+
+    let encryption = attributes.remove("encryption");
     let auditors: Vec<_> = attributes
         .remove("auditors")
-        .unwrap_or_default()
-        .split(",")
-        .map(|s| s.trim().to_string())
-        .collect();
-    let encryption = attributes.remove("encryption");
+        .map(|v| v.split(",").map(|s| s.trim().to_owned()).collect())
+        .unwrap_or_default();
     let acknowledgements = attributes.remove("acknowledgements");
-    let policy = attributes.remove("policy").ok_or(SecurityTxtError::MissingField("policy"))?;
+    let expiry = attributes.remove("expiry");
 
-    if !attributes.is_empty() {
-        return Err(SecurityTxtError::UnknownField(attributes.keys().next().unwrap().clone()));
+    if let Some(key) = attributes.into_keys().next() {
+        return Err(Error::UnknownField(key));
     }
 
     Ok(SecurityTxt {
         name,
         project_url,
+        contacts,
+        policy,
+        preferred_languages,
         source_code,
         source_release,
         source_revision,
-        expiry,
-        preferred_languages,
-        contacts,
-        auditors,
         encryption,
+        auditors,
         acknowledgements,
-        policy,
+        expiry,
     })
 }
 
 /// Finds and parses the security.txt in the haystack.
-pub fn find_and_parse(data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
-    let start = match memchr::memmem::find(data, SECURITY_TXT_BEGIN.as_bytes()) {
-        Some(i) => i,
-        None => return Err(SecurityTxtError::StartNotFound),
-    };
-    parse(&data[start..])
+pub fn find_and_parse(data: &[u8]) -> Result<SecurityTxt, Error> {
+    match memchr::memmem::find(data, SECURITY_TXT_BEGIN.as_bytes()) {
+        Some(start) => parse(&data[start..]),
+        None => Err(Error::StartNotFound),
+    }
 }
