@@ -13,4 +13,4 @@ thiserror = { workspace = true, optional = true }
 
 flate2 = { version = "1.0.32", optional = true }
 goblin = { version = "0.8.2", optional = true }
-serde_json = { version = "1.0.125", optional = true }
+serde_json = { version = "1.0.125", optional = true, features = ["arbitrary_precision", "preserve_order"] }
