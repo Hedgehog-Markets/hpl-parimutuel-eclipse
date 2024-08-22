@@ -5,6 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
+include-idl = { workspace = true, features = ["parse"] }
 security-txt = { workspace = true, features = ["parse"] }
 
 anyhow = { workspace = true }

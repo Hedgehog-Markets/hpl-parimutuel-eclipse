@@ -19,6 +19,7 @@ memchr = "2.7.4"
 
 common = { path = "crates/common" }
 common-test = { path = "crates/common-test" }
+include-idl = { path = "crates/include-idl" }
 security-txt = { path = "crates/security-txt" }
 
 [profile.release]

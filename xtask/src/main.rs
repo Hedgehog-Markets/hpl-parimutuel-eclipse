@@ -1,31 +1,22 @@
-use std::path::{Path, PathBuf};
-
-use anyhow::{Context, Result};
+use anyhow::Result;
 use clap::Parser;
+
+mod idl;
+mod security;
 
 #[derive(Parser)]
 enum Cli {
     /// Check program security.txt.
-    Security {
-        /// Path to the program binary.
-        program: PathBuf,
-    },
+    Security(security::Cli),
+    /// Check program embedded IDL.
+    Idl(idl::Cli),
 }
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli {
-        Cli::Security { program } => security(&program),
+        Cli::Security(cli) => cli.run(),
+        Cli::Idl(cli) => cli.run(),
     }
-}
-
-fn security(program: &Path) -> Result<()> {
-    let program_data = std::fs::read(program).context("failed to read program binary")?;
-    let security_txt =
-        security_txt::parse::find_and_parse(&program_data).context("invalid security.txt")?;
-
-    println!("{security_txt}");
-
-    Ok(())
 }

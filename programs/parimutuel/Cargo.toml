@@ -12,6 +12,7 @@ no-entrypoint = []
 
 [dependencies]
 common = { workspace = true }
+include-idl = { workspace = true }
 security-txt = { workspace = true }
 
 solana-program = { workspace = true }
@@ -28,3 +29,6 @@ num-derive = { workspace = true }
 
 [dev-dependencies]
 common-test = { workspace = true }
+
+[build-dependencies]
+include-idl = { workspace = true, features = ["shrink"] }

@@ -15,8 +15,6 @@ pub mod state;
 // Export sdk types for downstream users with a different sdk version.
 pub use solana_program;
 
-solana_program::declare_id!("PARrVs6F5egaNuz8g6pKJyU4ze3eX5xGZCFb3GLiVvu");
-
 #[cfg(not(feature = "no-entrypoint"))]
 security_txt::security_txt! {
     name: "Hedgehog Parimutuel",
@@ -24,3 +22,8 @@ security_txt::security_txt! {
     contacts: "email:james@hedgehog.markets",
     policy: "https://github.com/Hedgehog-Markets/security/security",
 }
+
+#[cfg(not(feature = "no-entrypoint"))]
+include_idl::include_idl!(concat!(env!("OUT_DIR"), "/solana.idl.zip"));
+
+solana_program::declare_id!("PARrVs6F5egaNuz8g6pKJyU4ze3eX5xGZCFb3GLiVvu");

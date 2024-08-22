@@ -1,7 +1,6 @@
 #[cfg(feature = "parse")]
 pub mod parse;
 
-/// Create a static string containing the security.txt file.
 #[macro_export]
 macro_rules! security_txt {
     ($($name:ident: $value:expr),* $(,)?) => {
