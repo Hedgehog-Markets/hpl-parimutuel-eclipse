@@ -1,4 +1,5 @@
 use std::io::{self, Read, Write};
+use std::mem::MaybeUninit;
 use std::ops::{Deref, DerefMut};
 
 use borsh::{BorshDeserialize, BorshSerialize};
@@ -42,15 +43,18 @@ impl<T> DerefMut for SmallArray<T> {
 
 impl<T: BorshDeserialize> BorshDeserialize for SmallArray<T> {
     fn deserialize_reader<R: Read>(reader: &mut R) -> io::Result<Self> {
-        let len = u8::deserialize_reader(reader)?;
+        let len = u8::deserialize_reader(reader)? as usize;
 
-        let mut vec = Vec::<T>::with_capacity(len as usize);
+        let mut vec = Vec::<T>::with_capacity(len);
 
-        for _ in 0..len {
+        for uninit in vec.spare_capacity_mut().iter_mut() {
             let element = T::deserialize_reader(reader)?;
 
-            vec.push(element);
+            *uninit = MaybeUninit::new(element);
         }
+
+        // SAFETY: `len == vec.capacity()` and elements `0..len` are now initialized.
+        unsafe { vec.set_len(len) };
 
         Ok(Self { vec })
     }
