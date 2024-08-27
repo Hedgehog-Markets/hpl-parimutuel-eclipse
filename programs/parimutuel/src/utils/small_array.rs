@@ -74,7 +74,7 @@ impl<T: BorshSize> BorshSize for SmallArray<T> {
 
     fn borsh_size(&self) -> usize {
         if T::IS_FIXED_SIZE {
-            Self::MIN_SIZE + (self.len() as usize * T::FIXED_SIZE)
+            Self::MIN_SIZE + (self.len() as usize) * T::FIXED_SIZE
         } else {
             let mut size = Self::MIN_SIZE;
 

@@ -103,7 +103,7 @@ pub(crate) trait Account: BorshDeserialize + BorshSerialize {
 
     #[track_caller]
     fn from_account_info(info: &AccountInfo) -> Result<Self, ProgramError> {
-        let data = info.data.borrow();
+        let data = info.try_borrow_data()?;
         let account = Self::safe_deserialize(*data)?;
 
         Self::check_account_owner(info.owner)?;
@@ -117,7 +117,7 @@ pub(crate) trait AccountSized: Account + BorshSize {
     fn from_account_info_mut<'a, 'info>(
         info: &'a AccountInfo<'info>,
     ) -> Result<AccountSizedMut<'a, 'info, Self>, ProgramError> {
-        let data = info.data.borrow_mut();
+        let data = info.try_borrow_mut_data()?;
         let data = RefMut::map(data, |data| *data);
 
         let account = Self::safe_deserialize(&data)?;

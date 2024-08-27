@@ -401,8 +401,8 @@ dependencies = [
 
 [[package]]
 name = "borsh-size"
-version = "0.0.1"
-source = "git+https://github.com/Hedgehog-Markets/solana-utils#165676ff131c2b63ea5b77fd4379d3000c362e55"
+version = "0.0.2"
+source = "git+https://github.com/Hedgehog-Markets/solana-utils#07c9bd0077d7c84eefdad695f060d16f12195ebf"
 dependencies = [
  "borsh-size-macro",
  "solana-program",
@@ -410,8 +410,8 @@ dependencies = [
 
 [[package]]
 name = "borsh-size-macro"
-version = "0.0.1"
-source = "git+https://github.com/Hedgehog-Markets/solana-utils#165676ff131c2b63ea5b77fd4379d3000c362e55"
+version = "0.0.2"
+source = "git+https://github.com/Hedgehog-Markets/solana-utils#07c9bd0077d7c84eefdad695f060d16f12195ebf"
 dependencies = [
  "proc-macro2",
  "proc-macro2-diagnostics",
@@ -978,7 +978,7 @@ checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
 [[package]]
 name = "include-idl"
 version = "0.0.0"
-source = "git+https://github.com/Hedgehog-Markets/solana-utils#165676ff131c2b63ea5b77fd4379d3000c362e55"
+source = "git+https://github.com/Hedgehog-Markets/solana-utils#07c9bd0077d7c84eefdad695f060d16f12195ebf"
 dependencies = [
  "flate2",
  "goblin",
@@ -1580,7 +1580,7 @@ dependencies = [
 [[package]]
 name = "security-txt"
 version = "0.0.0"
-source = "git+https://github.com/Hedgehog-Markets/solana-utils#165676ff131c2b63ea5b77fd4379d3000c362e55"
+source = "git+https://github.com/Hedgehog-Markets/solana-utils#07c9bd0077d7c84eefdad695f060d16f12195ebf"
 dependencies = [
  "goblin",
  "memchr",
@@ -1932,7 +1932,7 @@ checksum = "468aa43b7edb1f9b7b7b686d5c3aeb6630dc1708e86e31343499dd5c4d775183"
 [[package]]
 name = "solana-utils"
 version = "0.0.1"
-source = "git+https://github.com/Hedgehog-Markets/solana-utils#165676ff131c2b63ea5b77fd4379d3000c362e55"
+source = "git+https://github.com/Hedgehog-Markets/solana-utils#07c9bd0077d7c84eefdad695f060d16f12195ebf"
 dependencies = [
  "solana-program",
  "solana-utils-macro",
@@ -1941,7 +1941,7 @@ dependencies = [
 [[package]]
 name = "solana-utils-macro"
 version = "0.0.1"
-source = "git+https://github.com/Hedgehog-Markets/solana-utils#165676ff131c2b63ea5b77fd4379d3000c362e55"
+source = "git+https://github.com/Hedgehog-Markets/solana-utils#07c9bd0077d7c84eefdad695f060d16f12195ebf"
 dependencies = [
  "proc-macro2",
  "quote",
