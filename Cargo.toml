@@ -17,10 +17,12 @@ num-traits = "0.2.19"
 num-derive = "0.4.2"
 memchr = "2.7.4"
 
-common = { path = "crates/common" }
-common-test = { path = "crates/common-test" }
-include-idl = { path = "crates/include-idl" }
-security-txt = { path = "crates/security-txt" }
+cpi = { path = "crates/cpi" }
+
+borsh-size = { git = "https://github.com/Hedgehog-Markets/solana-utils" }
+include-idl = { git = "https://github.com/Hedgehog-Markets/solana-utils" }
+security-txt = { git = "https://github.com/Hedgehog-Markets/solana-utils" }
+solana-utils = { git = "https://github.com/Hedgehog-Markets/solana-utils" }
 
 [profile.release]
 opt-level = 3

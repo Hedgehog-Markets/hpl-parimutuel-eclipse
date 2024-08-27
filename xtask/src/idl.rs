@@ -18,7 +18,7 @@ enum IdlKind {
     Kinobi,
 }
 
-impl From<IdlKind> for include_idl::parse::IdlType {
+impl From<IdlKind> for include_idl::parse::IdlKind {
     fn from(value: IdlKind) -> Self {
         match value {
             IdlKind::Anchor => Self::Anchor,

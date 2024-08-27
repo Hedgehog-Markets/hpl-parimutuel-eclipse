@@ -5,13 +5,14 @@ use std::marker::PhantomData;
 use std::ops::{Deref, DerefMut};
 
 use borsh::{BorshDeserialize, BorshSerialize};
-use common::{BorshSize, VariantName};
+use borsh_size::{BorshSize, BorshSizeProperties};
 use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
+use solana_utils::{log, VariantName};
 
 mod config;
 mod market;
@@ -64,7 +65,7 @@ pub(crate) trait Account: BorshDeserialize + BorshSerialize {
     }
 
     fn check_account_owner(owner: &Pubkey) -> Result<(), ProgramError> {
-        if !common::cmp_pubkeys(owner, &crate::ID) {
+        if !solana_utils::pubkeys_eq(owner, &crate::ID) {
             log!("Error: {} account is owned by the wrong program", Self::name());
             return Err(ProgramError::IncorrectProgramId);
         }
@@ -95,7 +96,7 @@ pub(crate) trait Account: BorshDeserialize + BorshSerialize {
         }
 
         Self::deserialize(&mut &data[..]).map_err(|err| {
-            log!("Error: Failed to deserialize {} account: {err}", Self::name());
+            log!("Error: {} account deserialization failed: {err}", Self::name());
             ParimutuelError::DeserializationError.into()
         })
     }
@@ -111,11 +112,7 @@ pub(crate) trait Account: BorshDeserialize + BorshSerialize {
     }
 }
 
-pub(crate) trait AccountSized: Account {
-    const IS_FIXED_SIZE: bool;
-
-    fn serialized_size(&self) -> Option<usize>;
-
+pub(crate) trait AccountSized: Account + BorshSize {
     #[track_caller]
     fn from_account_info_mut<'a, 'info>(
         info: &'a AccountInfo<'info>,
@@ -131,13 +128,7 @@ pub(crate) trait AccountSized: Account {
     }
 }
 
-impl<T: Account + BorshSize> AccountSized for T {
-    const IS_FIXED_SIZE: bool = true;
-
-    fn serialized_size(&self) -> Option<usize> {
-        Some(<T as BorshSize>::SIZE)
-    }
-}
+impl<T: Account + BorshSize> AccountSized for T {}
 
 #[must_use = "Must call `.save()` to save account"]
 pub(crate) struct AccountSizedMut<'a, 'info, T> {
@@ -149,7 +140,7 @@ pub(crate) struct AccountSizedMut<'a, 'info, T> {
 impl<'a, 'info, T: AccountSized> AccountSizedMut<'a, 'info, T> {
     pub fn save(mut self) -> Result<T, ProgramError> {
         if !T::IS_FIXED_SIZE {
-            let size = self.serialized_size().ok_or(ProgramError::ArithmeticOverflow)?;
+            let size = self.borsh_size();
 
             if size > self.data.len() {
                 log!("Error: {} account overflows allocation", T::name());
@@ -222,7 +213,7 @@ impl<T: Account> AccountInitializer<T> {
             signers_seeds: signer_seeds,
         } = context;
 
-        common::create_or_allocate_account(
+        solana_utils::create_or_allocate_account(
             account_info,
             payer,
             system_program,
@@ -261,7 +252,7 @@ pub(crate) struct InitContext<'a, 'b, 'c, 'info> {
 
 fn serialize_account<W: io::Write, T: Account>(writer: W, account: &T) -> ProgramResult {
     borsh::to_writer(writer, account).map_err(|err| {
-        log!("Error: {} serialization failed {err}", T::name());
+        log!("Error: {} serialization failed: {err}", T::name());
         ParimutuelError::SerializationError.into()
     })
 }

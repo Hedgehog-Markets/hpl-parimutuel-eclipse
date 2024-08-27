@@ -46,8 +46,8 @@ macro_rules! pdas {
 
                 pub fn assert_pda<'a>($name: &'a Pubkey, $($seed : &'a $seed_ty),*) -> Result<u8, ProgramError> {
                     let (expected, bump) = pda($($seed),*);
-                    if !common::cmp_pubkeys($name, &expected) {
-                        log!("Error: {} address does not match seed derivation", $desc);
+                    if !solana_utils::pubkeys_eq($name, &expected) {
+                        solana_utils::log!("Error: {} address does not match seed derivation", $desc);
                         return Err(ProgramError::InvalidSeeds);
                     }
                     Ok(bump)

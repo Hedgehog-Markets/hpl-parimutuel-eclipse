@@ -12,7 +12,7 @@ pub struct Cli {
 impl Cli {
     pub fn run(self) -> Result<()> {
         let program_data = std::fs::read(self.program).context("failed to read program binary")?;
-        let security_txt = security_txt::parse::find_and_parse(&program_data)
+        let security_txt = security_txt::parse::parse_from_program(&program_data)
             .context("failed to read security.txt in program binary")?;
 
         println!("{security_txt}");

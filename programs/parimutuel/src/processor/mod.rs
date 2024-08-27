@@ -1,8 +1,8 @@
 use borsh::BorshDeserialize;
-use common::VariantName;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::pubkey::Pubkey;
+use solana_utils::{log, VariantName};
 
 mod claim_v1;
 mod create_config_v1;

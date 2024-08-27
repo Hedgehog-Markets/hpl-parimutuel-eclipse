@@ -11,9 +11,12 @@ crate-type = ["cdylib", "lib"]
 no-entrypoint = []
 
 [dependencies]
-common = { workspace = true }
+cpi = { workspace = true }
+
+borsh-size = { workspace = true }
 include-idl = { workspace = true }
 security-txt = { workspace = true }
+solana-utils = { workspace = true }
 
 solana-program = { workspace = true }
 
@@ -26,9 +29,6 @@ bytemuck = { workspace = true }
 thiserror = { workspace = true }
 num-traits = { workspace = true }
 num-derive = { workspace = true }
-
-[dev-dependencies]
-common-test = { workspace = true }
 
 [build-dependencies]
 include-idl = { workspace = true, features = ["shrink"] }

@@ -1,8 +1,8 @@
-use common::cpi;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
+use solana_utils::log;
 
 use crate::error::ParimutuelError;
 use crate::instruction::accounts::ClaimV1Accounts;

@@ -2,10 +2,11 @@
 
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
-use solana_program::program::{get_return_data, invoke, invoke_signed};
+use solana_program::program::get_return_data;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey;
 use solana_program::pubkey::Pubkey;
+use solana_utils::invoke::{invoke, invoke_signed};
 use spl_token_2022::extension::PodStateWithExtensions;
 use spl_token_2022::instruction::AuthorityType;
 use spl_token_2022::pod::{PodAccount, PodMint};
@@ -61,7 +62,7 @@ pub fn create_token_account(
 
     let account_len = get_account_len(mint, token_program)?;
 
-    crate::create_or_allocate_account(
+    solana_utils::create_or_allocate_account(
         account,
         payer,
         system_program,
@@ -189,7 +190,7 @@ fn get_account_len<'a>(
         &[mint.clone()],
     )?;
     get_return_data().ok_or(ProgramError::InvalidInstructionData).and_then(|(key, data)| {
-        if !crate::cmp_pubkeys(&key, token_program.key) {
+        if !solana_utils::pubkeys_eq(&key, token_program.key) {
             return Err(ProgramError::IncorrectProgramId);
         }
         data.try_into().map(usize::from_le_bytes).map_err(|_| ProgramError::InvalidInstructionData)

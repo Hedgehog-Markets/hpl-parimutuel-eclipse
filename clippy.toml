@@ -1,3 +1,2 @@
-disallowed-macros = [
-  { path = "solana_program::msg", reason = "Use `common::log!` instead" },
-]
+disallowed-macros = [{ path = "solana_program::msg", reason = "Use `solana_utils::log!` instead" }]
+disallowed-methods = [{ path = "solana_program::program::invoke", reason = "Use `solana_utils::invoke::invoke` instead" }, { path = "solana_program::program::invoke_signed", reason = "Use `solana_utils::invoke::invoke_signed` instead" }]

@@ -1,5 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use common::BorshSize;
+use borsh_size::BorshSize;
 use shank::ShankAccount;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
@@ -7,9 +7,9 @@ use solana_program::pubkey::Pubkey;
 use crate::error::ParimutuelError;
 use crate::utils::{SmallArray, SmallU64Array};
 
-use super::{Account, AccountSized, AccountType};
+use super::{Account, AccountType};
 
-#[derive(Clone, BorshDeserialize, BorshSerialize, ShankAccount)]
+#[derive(Clone, BorshDeserialize, BorshSerialize, BorshSize, ShankAccount)]
 pub struct UserPositionV1 {
     account_type: AccountType,
 
@@ -24,14 +24,6 @@ pub struct UserPositionV1 {
 }
 
 impl UserPositionV1 {
-    const BASE_SIZE: usize =
-        AccountType::SIZE // account_type
-        + Pubkey::SIZE // market
-        + Pubkey::SIZE // wallet
-        + bool::SIZE // claimed
-        + u8::SIZE // amounts.len()
-        ;
-
     pub fn claim(&mut self) -> Result<(), ParimutuelError> {
         if self.claimed {
             return Err(ParimutuelError::AlreadyClaimed);
@@ -44,14 +36,6 @@ impl UserPositionV1 {
 
 impl Account for UserPositionV1 {
     const TYPE: AccountType = AccountType::UserPositionV1;
-}
-
-impl AccountSized for UserPositionV1 {
-    const IS_FIXED_SIZE: bool = false;
-
-    fn serialized_size(&self) -> Option<usize> {
-        Self::BASE_SIZE.checked_add(usize::from(self.amounts.len()).checked_mul(u64::SIZE)?)
-    }
 }
 
 impl TryFrom<InitUserPosition> for (UserPositionV1, usize) {
@@ -67,7 +51,7 @@ impl TryFrom<InitUserPosition> for (UserPositionV1, usize) {
             claimed: false,
             amounts: SmallArray::from_elem(0, options),
         };
-        let size = position.serialized_size().ok_or(ProgramError::ArithmeticOverflow)?;
+        let size = position.borsh_size();
 
         Ok((position, size))
     }
@@ -92,7 +76,7 @@ mod tests {
         };
 
         let (request, expected) = <(UserPositionV1, usize)>::try_from(init).unwrap();
-        let actual = common_test::serialized_len(&request).unwrap();
+        let actual = request.try_to_vec().unwrap().len();
 
         assert_eq!(expected, actual);
     }

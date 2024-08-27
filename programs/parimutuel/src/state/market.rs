@@ -1,5 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use common::BorshSize;
+use borsh_size::BorshSize;
 use shank::ShankAccount;
 use solana_program::clock::Clock;
 use solana_program::program_error::ProgramError;
@@ -10,7 +10,7 @@ use crate::error::ParimutuelError;
 use crate::pda;
 use crate::utils::{Bps, SmallArray, SmallU64Array};
 
-use super::{Account, AccountSized, AccountType};
+use super::{Account, AccountType};
 
 #[derive(Clone, Default, PartialEq, Eq, BorshDeserialize, BorshSerialize, BorshSize)]
 #[repr(u8)]
@@ -24,7 +24,7 @@ pub enum State {
     Invalid,
 }
 
-#[derive(Clone, BorshDeserialize, BorshSerialize, ShankAccount)]
+#[derive(Clone, BorshDeserialize, BorshSerialize, BorshSize, ShankAccount)]
 pub struct MarketV1 {
     account_type: AccountType,
 
@@ -66,36 +66,19 @@ pub struct MarketV1 {
 }
 
 impl MarketV1 {
-    const BASE_SIZE: usize =
-        AccountType::SIZE // account_type
-        + Pubkey::SIZE // creator
-        + u32::SIZE // index
-        + Pubkey::SIZE // resolver
-        + Pubkey::SIZE // mint
-        + i64::SIZE // close_timestamp
-        + i64::SIZE // resolve_timestamp
-        + i64::SIZE // outcome_timestamp
-        + Bps::SIZE // creator_fees
-        + Bps::SIZE // platform_fees
-        + State::SIZE // state
-        + u8::SIZE // outcome
-        + u8::SIZE // amounts.len()
-        + u32::SIZE // uri.len()
-        ;
-
     pub fn assert_pda(&self, market: &Pubkey) -> Result<u8, ProgramError> {
         pda::market::assert_pda(market, &self.creator, &self.index)
     }
 
     pub fn assert_mint(&self, mint: &Pubkey) -> Result<(), ProgramError> {
-        if !common::cmp_pubkeys(&self.mint, mint) {
+        if !solana_utils::pubkeys_eq(&self.mint, mint) {
             return Err(ParimutuelError::MarketMintMismatch.into());
         }
         Ok(())
     }
 
     pub fn assert_resolver(&self, resolver: &Pubkey) -> Result<(), ProgramError> {
-        if !common::cmp_pubkeys(&self.resolver, resolver) {
+        if !solana_utils::pubkeys_eq(&self.resolver, resolver) {
             return Err(ParimutuelError::MarketResolverMismatch.into());
         }
         Ok(())
@@ -118,16 +101,6 @@ impl MarketV1 {
 
 impl Account for MarketV1 {
     const TYPE: AccountType = AccountType::MarketV1;
-}
-
-impl AccountSized for MarketV1 {
-    const IS_FIXED_SIZE: bool = false;
-
-    fn serialized_size(&self) -> Option<usize> {
-        Self::BASE_SIZE
-            .checked_add(usize::from(self.amounts.len()).checked_mul(u64::SIZE)?)?
-            .checked_add(self.uri.len())
-    }
 }
 
 impl TryFrom<InitMarket> for (MarketV1, usize) {
@@ -163,7 +136,7 @@ impl TryFrom<InitMarket> for (MarketV1, usize) {
             amounts: SmallArray::from_elem(0, options),
             uri,
         };
-        let space = market.serialized_size().ok_or(ProgramError::ArithmeticOverflow)?;
+        let space = market.borsh_size();
 
         Ok((market, space))
     }
@@ -206,7 +179,7 @@ mod tests {
         };
 
         let (request, expected) = <(MarketV1, usize)>::try_from(init).unwrap();
-        let actual = common_test::serialized_len(&request).unwrap();
+        let actual = request.try_to_vec().unwrap().len();
 
         assert_eq!(expected, actual);
     }

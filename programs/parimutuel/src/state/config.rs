@@ -1,5 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use common::BorshSize;
+use borsh_size::{BorshSize, BorshSizeProperties};
 use shank::ShankAccount;
 use solana_program::pubkey::Pubkey;
 
@@ -24,7 +24,7 @@ pub struct ConfigV1 {
 
 impl ConfigV1 {
     pub fn assert_authority(&self, authority: &Pubkey) -> Result<(), ParimutuelError> {
-        if !common::cmp_pubkeys(&self.authority, authority) {
+        if !solana_utils::pubkeys_eq(&self.authority, authority) {
             return Err(ParimutuelError::ConfigAuthorityMismatch);
         }
         Ok(())
@@ -41,7 +41,7 @@ impl From<InitConfig> for (ConfigV1, usize) {
 
         (
             ConfigV1 { account_type: ConfigV1::TYPE, authority, platform_fee, inactive_duration },
-            ConfigV1::SIZE,
+            ConfigV1::FIXED_SIZE,
         )
     }
 }

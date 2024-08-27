@@ -1,5 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
-use common::BorshSize;
+use borsh_size::{BorshSize, BorshSizeProperties};
 use shank::ShankAccount;
 use solana_program::pubkey::Pubkey;
 
@@ -17,7 +17,7 @@ pub struct UserV1 {
 
 impl UserV1 {
     pub fn assert_wallet(&self, wallet: &Pubkey) -> Result<(), ParimutuelError> {
-        if !common::cmp_pubkeys(&self.wallet, wallet) {
+        if !solana_utils::pubkeys_eq(&self.wallet, wallet) {
             return Err(ParimutuelError::UserWalletMismatch);
         }
         Ok(())
@@ -32,7 +32,7 @@ impl From<InitUser> for (UserV1, usize) {
     fn from(params: InitUser) -> (UserV1, usize) {
         let InitUser { wallet } = params;
 
-        (UserV1 { account_type: UserV1::TYPE, wallet, next_market: 0 }, UserV1::SIZE)
+        (UserV1 { account_type: UserV1::TYPE, wallet, next_market: 0 }, UserV1::FIXED_SIZE)
     }
 }
 

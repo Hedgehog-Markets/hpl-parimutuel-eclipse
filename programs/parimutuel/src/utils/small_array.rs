@@ -2,6 +2,7 @@ use std::io::{self, Read, Write};
 use std::ops::{Deref, DerefMut};
 
 use borsh::{BorshDeserialize, BorshSerialize};
+use borsh_size::{BorshSize, BorshSizeProperties};
 
 pub type SmallU64Array = SmallArray<u64>;
 
@@ -64,6 +65,25 @@ impl<T: BorshSerialize> BorshSerialize for SmallArray<T> {
         }
 
         Ok(())
+    }
+}
+
+impl<T: BorshSize> BorshSize for SmallArray<T> {
+    const MIN_SIZE: usize = u8::MIN_SIZE;
+    const MAX_SIZE: Option<usize> = None;
+
+    fn borsh_size(&self) -> usize {
+        if T::IS_FIXED_SIZE {
+            Self::MIN_SIZE + (self.len() as usize * T::FIXED_SIZE)
+        } else {
+            let mut size = Self::MIN_SIZE;
+
+            for element in self.iter() {
+                size += element.borsh_size();
+            }
+
+            size
+        }
     }
 }
 
