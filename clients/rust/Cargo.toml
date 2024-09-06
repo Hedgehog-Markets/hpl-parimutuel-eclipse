@@ -8,13 +8,13 @@ publish = false
 serde = ["dep:serde", "serde_with"]
 
 [dependencies]
-solana-program = "2.0.1"
+solana-program = "2.0"
 
 borsh = { version = "0.10.3", features = ["const-generics"] }
-thiserror = "1.0.61"
+thiserror = "1.0"
 num-traits = "0.2.19"
 num-derive = "0.4.2"
 
 serde = { version = "1.0", optional = true }
-serde_with = { version = "3.6.0", optional = true }
+serde_with = { version = "3.6", optional = true }
 kaigan = "0.2.5"

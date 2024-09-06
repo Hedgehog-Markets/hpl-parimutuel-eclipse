@@ -76,7 +76,7 @@ mod tests {
         };
 
         let (request, expected) = <(UserPositionV1, usize)>::try_from(init).unwrap();
-        let actual = request.try_to_vec().unwrap().len();
+        let actual = borsh::object_length(&request).unwrap();
 
         assert_eq!(expected, actual);
     }
