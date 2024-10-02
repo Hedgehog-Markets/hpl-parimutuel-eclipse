@@ -55,20 +55,11 @@ def parse_args(args: List[str]) -> Tuple[List[str], List[str]]:
     return args, []
 
 
-def build(program: Path, args: List[str]):
+def main(args: List[str]):
     cargo = shutil.which("cargo")
     if cargo is None:
         raise RuntimeError("cargo executable not found")
 
-    tools_version = get_tools_version_args()
-
-    return subprocess.check_call(
-        [cargo, "build-sbf", "--sbf-out-dir", output_dir, *tools_version, *args],
-        cwd=program,
-    )
-
-
-def main(args: List[str]):
     program_filter, args = parse_args(args)
 
     if len(program_filter) == 0:
@@ -84,8 +75,13 @@ def main(args: List[str]):
     if len(programs) == 0:
         raise RuntimeError("no programs found")
 
+    tools_version = get_tools_version_args()
+
     for program in programs:
-        build(program, args)
+        subprocess.check_call(
+            [cargo, "build-sbf", "--sbf-out-dir", output_dir, *tools_version, *args],
+            cwd=program,
+        )
 
 
 if __name__ == "__main__":

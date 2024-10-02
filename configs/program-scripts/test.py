@@ -234,8 +234,7 @@ def main(args: List[str]):
     programs = list(programs)
 
     if len(programs) == 0:
-        print("no programs found")
-        exit(1)
+        raise RuntimeError("no programs found")
 
     env = os.environ.copy()
 
@@ -250,7 +249,7 @@ def main(args: List[str]):
 
     tools_version = get_tools_version_args()
 
-    cmd = [
+    cmd: List[str | Path] = [
         cargo,
         "test-sbf",
         "--sbf-out-dir",
