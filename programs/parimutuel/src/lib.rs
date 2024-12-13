@@ -19,7 +19,7 @@ pub use solana_program;
 security_txt::security_txt! {
     name: "Hedgehog Parimutuel",
     project_url: "https://hedgehog.markets",
-    contacts: "email:james@hedgehog.markets",
+    contacts: "email:developers@hedgehog.markets",
     policy: "https://github.com/Hedgehog-Markets/security/security",
 }
 
